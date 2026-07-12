@@ -23,6 +23,10 @@ import {
   ShieldCheck
 } from "lucide-react";
 
+import { useState } from "react";
+import { toast } from "sonner";
+import api from "@/lib/axios";
+
 import {
   Sidebar,
   SidebarContent,
@@ -36,6 +40,15 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuLabel, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
+import { ChevronUp, LogOut } from "lucide-react";
 
 type NavItem = {
   title: string;
@@ -69,8 +82,27 @@ const getRoleName = (roleId?: number) => {
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const { user, login, logout } = useAuth();
   const { hasAnyRole } = useRBAC();
+  const [isSwitching, setIsSwitching] = useState(false);
+
+  const switchRole = async (email: string) => {
+    if (user?.email === email) return;
+    setIsSwitching(true);
+    const loadingToastId = toast.loading("Switching role...");
+    try {
+      const response = await api.post("/auth/login", { email, password: "password123" });
+      if (response.data.success) {
+        login(response.data.token, response.data.user);
+        toast.success("Role switched successfully!", { id: loadingToastId });
+        window.location.href = "/dashboard"; // hard refresh to update entire app state 
+      }
+    } catch (error) {
+      toast.error("Failed to switch role.", { id: loadingToastId });
+    } finally {
+      setIsSwitching(false);
+    }
+  };
 
   const filteredNavItems = navItems.filter((item) => hasAnyRole(item.allowedRoles));
 
@@ -107,22 +139,48 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-border/50 p-4">
-        <div className="flex items-center gap-3">
-          <Avatar className="h-9 w-9 border border-border">
-            <AvatarImage src="" alt={user ? `${user.first_name} ${user.last_name}` : "User"} />
-            <AvatarFallback>
-              {user ? `${user.first_name?.[0] || ""}${user.last_name?.[0] || ""}`.toUpperCase() : "U"}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col text-sm">
-            <span className="font-semibold text-foreground">
-              {user ? `${user.first_name} ${user.last_name} (${getRoleName(user.role_id)})` : "Loading..."}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {user?.email || ""}
-            </span>
-          </div>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="w-full text-left bg-transparent border-0 p-0 m-0 cursor-pointer outline-none">
+            <div className="flex items-center gap-3 cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 p-2 -mx-2 rounded-md transition-colors">
+              <Avatar className="h-9 w-9 border border-border">
+                <AvatarImage src="" alt={user ? `${user.first_name} ${user.last_name}` : "User"} />
+                <AvatarFallback>
+                  {user ? `${user.first_name?.[0] || ""}${user.last_name?.[0] || ""}`.toUpperCase() : "U"}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col text-sm flex-1">
+                <span className="font-semibold text-foreground">
+                  {user ? `${user.first_name} ${user.last_name} (${getRoleName(user.role_id)})` : "Loading..."}
+                </span>
+                <span className="text-xs text-muted-foreground truncate w-[130px]">
+                  {user?.email || ""}
+                </span>
+              </div>
+              <ChevronUp className="h-4 w-4 text-muted-foreground" />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="top" className="w-[240px]">
+            <DropdownMenuLabel className="text-xs text-muted-foreground uppercase tracking-wider">Quick Switch Role</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => switchRole('admin@transit.com')} disabled={isSwitching} className="cursor-pointer">
+              Admin
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => switchRole('manager@transit.com')} disabled={isSwitching} className="cursor-pointer">
+              Fleet Manager
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => switchRole('driver@transit.com')} disabled={isSwitching} className="cursor-pointer">
+              Driver
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => switchRole('analyst@transit.com')} disabled={isSwitching} className="cursor-pointer">
+              Financial Analyst
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={logout} className="text-red-600 focus:bg-red-50 focus:text-red-600 cursor-pointer">
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Logout</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarFooter>
     </Sidebar>
   );
