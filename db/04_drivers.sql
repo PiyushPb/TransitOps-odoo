@@ -1,0 +1,20 @@
+CREATE TABLE drivers (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(30) NOT NULL,
+    email VARCHAR(255) UNIQUE,
+    phone VARCHAR(15) UNIQUE NOT NULL,
+    address TEXT,
+    date_of_birth DATE,
+    emergency_contact VARCHAR(15),
+    license_number VARCHAR(30) UNIQUE NOT NULL,
+    license_category VARCHAR(20) NOT NULL,
+    license_issue_date DATE NOT NULL,
+    license_expiry_date DATE NOT NULL,
+    safety_score DECIMAL(5, 2) DEFAULT 100,
+    status VARCHAR(20) NOT NULL,
+    joining_date DATE,
+    notes TEXT,
+    created_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP
+);
