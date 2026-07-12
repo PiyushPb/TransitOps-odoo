@@ -1,0 +1,28 @@
+meta {
+  name: Create Driver
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/drivers
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "first_name": "Alex",
+    "last_name": "Smith",
+    "phone": "9876543210",
+    "license_number": "DL-12345",
+    "license_category": "Heavy",
+    "license_issue_date": "2020-01-01T00:00:00Z",
+    "license_expiry_date": "2030-01-01T00:00:00Z",
+    "status": "Available"
+  }
+}

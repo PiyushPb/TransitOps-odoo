@@ -1,0 +1,21 @@
+meta {
+  name: Update Driver
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/drivers/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "status": "Suspended"
+  }
+}

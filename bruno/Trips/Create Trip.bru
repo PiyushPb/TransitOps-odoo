@@ -1,0 +1,29 @@
+meta {
+  name: Create Trip
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/trips
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "trip_number": "TRP-001",
+    "vehicle_id": 1,
+    "driver_id": 1,
+    "source": "Warehouse A",
+    "destination": "Store B",
+    "cargo_weight": 400,
+    "planned_distance": 50.5,
+    "planned_start": "2026-07-15T10:00:00Z",
+    "start_odometer": 1000
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Cancel Trip
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/trips/1/cancel
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
