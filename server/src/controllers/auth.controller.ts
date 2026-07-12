@@ -31,6 +31,7 @@ export const registerUser = async (req: Request, res: Response) => {
         password_hash,
         role_id: defaultRoleId,
         phone: data.phone,
+        is_active: false,
       },
     });
 
@@ -46,6 +47,7 @@ export const registerUser = async (req: Request, res: Response) => {
         last_name: newUser.last_name,
         email: newUser.email,
         role_id: newUser.role_id,
+        is_active: newUser.is_active,
       },
     });
   } catch (error) {
@@ -65,8 +67,8 @@ export const loginUser = async (req: Request, res: Response) => {
       where: { email: data.email },
     });
 
-    if (!user || !user.is_active) {
-      return res.status(401).json({ success: false, message: 'Invalid credentials or account inactive' });
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
     const isMatch = await bcrypt.compare(data.password, user.password_hash);
@@ -92,6 +94,7 @@ export const loginUser = async (req: Request, res: Response) => {
         last_name: user.last_name,
         email: user.email,
         role_id: user.role_id,
+        is_active: user.is_active,
       },
     });
   } catch (error) {

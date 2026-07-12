@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import { useRBAC } from "@/hooks/use-rbac";
 import { ROLES, RoleId } from "@/lib/roles";
 
@@ -18,12 +19,15 @@ const routePermissions: Record<string, RoleId[]> = {
   "/analytics": [ROLES.ADMIN, ROLES.FINANCIAL_ANALYST],
   "/reports": [ROLES.ADMIN, ROLES.FINANCIAL_ANALYST],
   "/settings": [ROLES.ADMIN],
+  "/users": [ROLES.ADMIN],
 };
 
 export function CentralRoleGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { hasAnyRole, loading } = useRBAC();
+  const { hasAnyRole, loading: rbacLoading } = useRBAC();
+  const { user, loading: authLoading } = useAuth();
+  const loading = rbacLoading || authLoading;
 
   const requiredRoles = useMemo(() => {
     // Match exact path or subpath
@@ -36,10 +40,17 @@ export function CentralRoleGuard({ children }: { children: React.ReactNode }) {
   }, [pathname]);
 
   useEffect(() => {
-    if (!loading && requiredRoles && !hasAnyRole(requiredRoles)) {
-      router.replace("/dashboard");
+    if (!loading && user) {
+      if (user.is_active === false && pathname !== '/pending') {
+        router.replace("/pending");
+        return;
+      }
+
+      if (requiredRoles && !hasAnyRole(requiredRoles)) {
+        router.replace("/dashboard");
+      }
     }
-  }, [loading, hasAnyRole, requiredRoles, router]);
+  }, [loading, user, hasAnyRole, requiredRoles, router, pathname]);
 
   if (loading) {
     return (
@@ -47,6 +58,10 @@ export function CentralRoleGuard({ children }: { children: React.ReactNode }) {
         <div className="animate-spin h-8 w-8 border-4 border-black dark:border-white border-t-transparent rounded-full" />
       </div>
     );
+  }
+
+  if (!user || (user.is_active === false && pathname !== '/pending')) {
+    return null;
   }
 
   if (requiredRoles && !hasAnyRole(requiredRoles)) {

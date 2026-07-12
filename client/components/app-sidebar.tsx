@@ -19,7 +19,8 @@ import {
   BarChart3, 
   FileText, 
   Settings,
-  Bus
+  Bus,
+  ShieldCheck
 } from "lucide-react";
 
 import {
@@ -55,6 +56,7 @@ const navItems: NavItem[] = [
   { title: "Alerts", url: "/alerts", icon: Bell, allowedRoles: [ROLES.ADMIN, ROLES.FLEET_MANAGER] },
   { title: "Analytics", url: "/analytics", icon: BarChart3, allowedRoles: [ROLES.ADMIN, ROLES.FINANCIAL_ANALYST] },
   { title: "Reports", url: "/reports", icon: FileText, allowedRoles: [ROLES.ADMIN, ROLES.FINANCIAL_ANALYST] },
+  { title: "Users", url: "/users", icon: ShieldCheck, allowedRoles: [ROLES.ADMIN] },
   { title: "Settings", url: "/settings", icon: Settings, allowedRoles: [ROLES.ADMIN] },
 ];
 

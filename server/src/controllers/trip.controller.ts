@@ -7,6 +7,11 @@ export const createTrip = async (req: Request, res: Response) => {
   try {
     const data = createTripSchema.parse(req.body);
     const userId = req.user!.userId;
+    const roleId = req.user!.roleId;
+
+    if (roleId !== 1 && roleId !== 2) {
+      return res.status(403).json({ success: false, message: 'Forbidden: Insufficient permissions to create trips' });
+    }
 
     // Validate vehicle and driver capacity
     const vehicle = await prisma.vehicles.findUnique({ where: { id: data.vehicle_id } });
@@ -105,12 +110,20 @@ export const completeTrip = async (req: Request, res: Response) => {
       return res.status(400).json({ success: false, message: 'Only Dispatched trips can be completed' });
     }
 
+    if (data.end_odometer < trip.start_odometer) {
+      return res.status(400).json({ success: false, message: `End odometer (${data.end_odometer}) cannot be less than start odometer (${trip.start_odometer})` });
+    }
+
+    const actual_distance = data.actual_distance ?? (data.end_odometer - trip.start_odometer);
+    const actual_end = data.actual_end ? new Date(data.actual_end) : new Date();
+
     await prisma.$transaction(async (tx) => {
       await tx.trips.update({
         where: { id: trip.id },
         data: {
           ...data,
-          actual_end: new Date(data.actual_end),
+          actual_distance,
+          actual_end,
           status: 'Completed',
           updated_at: new Date(),
         },
@@ -176,7 +189,24 @@ export const cancelTrip = async (req: Request, res: Response) => {
 
 export const getTrips = async (req: Request, res: Response) => {
   try {
+    const { userId, roleId } = req.user!;
+    let whereClause: any = {};
+
+    if (roleId === 3) {
+      const user = await prisma.users.findUnique({ where: { id: userId } });
+      if (!user || !user.email) {
+        return res.status(200).json({ success: true, trips: [] });
+      }
+      
+      const driver = await prisma.drivers.findUnique({ where: { email: user.email } });
+      if (!driver) {
+        return res.status(200).json({ success: true, trips: [] });
+      }
+      whereClause.driver_id = driver.id;
+    }
+
     const trips = await prisma.trips.findMany({
+      where: whereClause,
       orderBy: { created_at: 'desc' },
       include: {
         vehicles: { select: { vehicle_name: true, registration_number: true } },

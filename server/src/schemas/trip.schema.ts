@@ -16,9 +16,10 @@ export const createTripSchema = z.object({
 });
 
 export const completeTripSchema = z.object({
-  actual_distance: z.number().positive(),
-  actual_end: z.string().datetime().or(z.date()),
+  actual_distance: z.number().nonnegative().optional(),
+  actual_end: z.string().datetime().or(z.date()).optional(),
   fuel_consumed: z.number().nonnegative().optional(),
   end_odometer: z.number().int().nonnegative(),
+  revenue: z.number().nonnegative().optional(),
   remarks: z.string().optional(),
 });
