@@ -57,7 +57,7 @@ export default function AnalyticsPage() {
                 <DollarSign className="h-4 w-4 text-emerald-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">${data.kpis.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                <div className="text-2xl font-bold">₹{data.kpis.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                 <p className="text-xs text-muted-foreground mt-1">From completed trips</p>
               </CardContent>
             </Card>
@@ -69,7 +69,7 @@ export default function AnalyticsPage() {
               </CardHeader>
               <CardContent>
                 <div className={`text-2xl font-bold ${data.kpis.netProfit >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                  ${data.kpis.netProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  ₹{data.kpis.netProfit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">Revenue minus all expenses</p>
               </CardContent>
@@ -92,7 +92,7 @@ export default function AnalyticsPage() {
                 <Wrench className="h-4 w-4 text-amber-500" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">${data.kpis.totalMaintenanceCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                <div className="text-2xl font-bold">₹{data.kpis.totalMaintenanceCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                 <p className="text-xs text-muted-foreground mt-1">All time maintenance costs</p>
               </CardContent>
             </Card>
@@ -123,13 +123,13 @@ export default function AnalyticsPage() {
                       axisLine={false} 
                       tickLine={false} 
                       tick={{ fill: '#6b7280', fontSize: 12 }}
-                      tickFormatter={(value) => `$${value}`} 
+                      tickFormatter={(value) => `₹${value}`} 
                       dx={-10}
                     />
                     <RechartsTooltip 
                       cursor={{ fill: '#f3f4f6' }}
                       contentStyle={{ borderRadius: '8px', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                      formatter={(value: any) => [`$${Number(value).toFixed(2)}`, undefined]}
+                      formatter={(value: any) => [`₹${Number(value).toFixed(2)}`, undefined]}
                     />
                     <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px' }} />
                     <Bar dataKey="revenue" name="Revenue" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={50} />

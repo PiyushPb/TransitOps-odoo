@@ -171,7 +171,7 @@ export default function MaintenancePage() {
     {
       accessorKey: "cost",
       header: "Cost",
-      cell: ({ row }: any) => `$${row.getValue("cost")}`,
+      cell: ({ row }: any) => `₹${row.getValue("cost")}`,
     },
     {
       accessorKey: "status",
@@ -285,7 +285,7 @@ export default function MaintenancePage() {
                     <Input type="date" required value={formData.maintenance_date} onChange={e => setFormData({...formData, maintenance_date: e.target.value})} />
                   </div>
                   <div className="space-y-2">
-                    <Label>Estimated Cost ($)</Label>
+                    <Label>Estimated Cost (₹)</Label>
                     <Input type="number" step="0.01" required placeholder="0.00" value={formData.cost} onChange={e => setFormData({...formData, cost: e.target.value})} />
                   </div>
                 </div>
@@ -368,7 +368,7 @@ export default function MaintenancePage() {
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm font-medium text-muted-foreground">Cost</p>
-                  <p className="font-medium">${selectedLog.cost}</p>
+                  <p className="font-medium">₹{selectedLog.cost}</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm font-medium text-muted-foreground">Scheduled Date</p>
@@ -411,7 +411,7 @@ export default function MaintenancePage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Final Cost ($)</Label>
+              <Label>Final Cost (₹)</Label>
               <Input 
                 type="number" 
                 step="0.01" 

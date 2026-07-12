@@ -593,7 +593,7 @@ export default function TripsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Revenue Generated ($)</Label>
+              <Label>Revenue Generated (₹)</Label>
               <Input 
                 type="number" 
                 step="0.01" 
