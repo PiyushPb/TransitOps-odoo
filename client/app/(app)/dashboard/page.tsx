@@ -1,12 +1,31 @@
+"use client";
+
 import { PageHeader } from "@/components/page-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { OverviewChart } from "@/components/overview-chart";
-import { CarFront, Route, Users, Navigation, AlertTriangle, Wrench } from "lucide-react";
+import { CarFront, Route, Users, Navigation, AlertTriangle, Wrench, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { RoleGate } from "@/components/role-gate";
+import { ROLES } from "@/lib/roles";
+
+const LockedScreen = () => (
+  <div className="flex flex-col items-center justify-center h-[80vh] text-center space-y-4 animate-in fade-in zoom-in duration-500">
+    <div className="bg-muted p-6 rounded-full">
+      <Lock className="h-12 w-12 text-muted-foreground" />
+    </div>
+    <div className="space-y-2">
+      <h2 className="text-2xl font-bold tracking-tight">Dashboard Restricted</h2>
+      <p className="text-muted-foreground max-w-md mx-auto">
+        Your current role does not have permission to view the executive dashboard overview. Please use the sidebar to navigate to your authorized sections.
+      </p>
+    </div>
+  </div>
+);
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <RoleGate allowedRoles={[ROLES.ADMIN, ROLES.FINANCIAL_ANALYST]} fallback={<LockedScreen />}>
+      <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <PageHeader 
         title="Dashboard" 
         description="Overview of your fleet and operations today."
@@ -131,5 +150,6 @@ export default function DashboardPage() {
         </Card>
       </div>
     </div>
+    </RoleGate>
   );
 }

@@ -4,6 +4,7 @@ import * as React from "react";
 import { Bell, Search, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +30,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export function TopNavbar() {
   const { setTheme } = useTheme();
   const pathname = usePathname();
+  const { user, logout } = useAuth();
   
   // Simple breadcrumb generation from pathname
   const paths = pathname.split("/").filter(Boolean);
@@ -113,16 +115,20 @@ export function TopNavbar() {
         <DropdownMenu>
           <DropdownMenuTrigger className={buttonVariants({ variant: "ghost" }) + " relative h-9 w-9 rounded-full p-0"}>
               <Avatar className="h-9 w-9">
-                <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-                <AvatarFallback>AD</AvatarFallback>
+                <AvatarImage src="" alt={user ? `${user.first_name} ${user.last_name}` : "User"} />
+                <AvatarFallback>
+                  {user ? `${user.first_name?.[0] || ""}${user.last_name?.[0] || ""}`.toUpperCase() : "U"}
+                </AvatarFallback>
               </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end">
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Admin User</p>
+                <p className="text-sm font-medium leading-none">
+                  {user ? `${user.first_name} ${user.last_name}` : "User"}
+                </p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  admin@transitops.com
+                  {user?.email || ""}
                 </p>
               </div>
             </DropdownMenuLabel>
@@ -130,7 +136,7 @@ export function TopNavbar() {
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+            <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive" onClick={logout}>
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

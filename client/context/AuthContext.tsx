@@ -6,8 +6,8 @@ import api from "../lib/axios";
 
 export interface User {
   id: number;
-  f_name: string;
-  l_name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   role_id: number;
 }
@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!user && !isPublicRoute) {
         router.push("/login");
       } else if (user && isPublicRoute) {
-        router.push("/");
+        router.push("/dashboard");
       }
     }
   }, [user, loading, pathname, router]);
@@ -70,7 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = (token: string, userData: User) => {
     localStorage.setItem("token", token);
     setUser(userData);
-    router.push("/");
+    router.push("/dashboard");
   };
 
   const logout = () => {

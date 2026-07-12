@@ -3,6 +3,9 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { useRBAC } from "@/hooks/use-rbac";
+import { ROLES, RoleId } from "@/lib/roles";
 import { 
   LayoutDashboard, 
   CarFront, 
@@ -33,23 +36,44 @@ import {
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const navItems = [
-  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Vehicles", url: "/vehicles", icon: CarFront },
-  { title: "Drivers", url: "/drivers", icon: Users },
-  { title: "Routes", url: "/routes", icon: Route },
-  { title: "Trips", url: "/trips", icon: Navigation },
-  { title: "Schedules", url: "/schedules", icon: CalendarDays },
-  { title: "Maintenance", url: "/maintenance", icon: Wrench },
-  { title: "Incidents", url: "/incidents", icon: AlertTriangle },
-  { title: "Alerts", url: "/alerts", icon: Bell },
-  { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "Reports", url: "/reports", icon: FileText },
-  { title: "Settings", url: "/settings", icon: Settings },
+type NavItem = {
+  title: string;
+  url: string;
+  icon: any;
+  allowedRoles: RoleId[];
+};
+
+const navItems: NavItem[] = [
+  { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard, allowedRoles: [ROLES.ADMIN, ROLES.FLEET_MANAGER, ROLES.DRIVER, ROLES.FINANCIAL_ANALYST] },
+  { title: "Vehicles", url: "/vehicles", icon: CarFront, allowedRoles: [ROLES.ADMIN, ROLES.FLEET_MANAGER] },
+  { title: "Drivers", url: "/drivers", icon: Users, allowedRoles: [ROLES.ADMIN, ROLES.FLEET_MANAGER] },
+  { title: "Routes", url: "/routes", icon: Route, allowedRoles: [ROLES.ADMIN, ROLES.FLEET_MANAGER] },
+  { title: "Trips", url: "/trips", icon: Navigation, allowedRoles: [ROLES.ADMIN, ROLES.FLEET_MANAGER, ROLES.DRIVER] },
+  { title: "Schedules", url: "/schedules", icon: CalendarDays, allowedRoles: [ROLES.ADMIN, ROLES.FLEET_MANAGER] },
+  { title: "Maintenance", url: "/maintenance", icon: Wrench, allowedRoles: [ROLES.ADMIN, ROLES.FLEET_MANAGER] },
+  { title: "Incidents", url: "/incidents", icon: AlertTriangle, allowedRoles: [ROLES.ADMIN, ROLES.FLEET_MANAGER, ROLES.DRIVER] },
+  { title: "Alerts", url: "/alerts", icon: Bell, allowedRoles: [ROLES.ADMIN, ROLES.FLEET_MANAGER] },
+  { title: "Analytics", url: "/analytics", icon: BarChart3, allowedRoles: [ROLES.ADMIN, ROLES.FINANCIAL_ANALYST] },
+  { title: "Reports", url: "/reports", icon: FileText, allowedRoles: [ROLES.ADMIN, ROLES.FINANCIAL_ANALYST] },
+  { title: "Settings", url: "/settings", icon: Settings, allowedRoles: [ROLES.ADMIN] },
 ];
+
+const getRoleName = (roleId?: number) => {
+  switch (roleId) {
+    case ROLES.ADMIN: return "Admin";
+    case ROLES.FLEET_MANAGER: return "Fleet Manager";
+    case ROLES.DRIVER: return "Driver";
+    case ROLES.FINANCIAL_ANALYST: return "Financial Analyst";
+    default: return "";
+  }
+};
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const { user } = useAuth();
+  const { hasAnyRole } = useRBAC();
+
+  const filteredNavItems = navItems.filter((item) => hasAnyRole(item.allowedRoles));
 
   return (
     <Sidebar>
@@ -67,7 +91,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1.5">
-              {navItems.map((item) => {
+              {filteredNavItems.map((item) => {
                 const isActive = pathname === item.url || pathname.startsWith(`${item.url}/`);
                 return (
                   <SidebarMenuItem key={item.title}>
@@ -86,12 +110,18 @@ export function AppSidebar() {
       <SidebarFooter className="border-t border-border/50 p-4">
         <div className="flex items-center gap-3">
           <Avatar className="h-9 w-9 border border-border">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>AD</AvatarFallback>
+            <AvatarImage src="" alt={user ? `${user.first_name} ${user.last_name}` : "User"} />
+            <AvatarFallback>
+              {user ? `${user.first_name?.[0] || ""}${user.last_name?.[0] || ""}`.toUpperCase() : "U"}
+            </AvatarFallback>
           </Avatar>
           <div className="flex flex-col text-sm">
-            <span className="font-semibold text-foreground">Admin User</span>
-            <span className="text-xs text-muted-foreground">admin@transitops.com</span>
+            <span className="font-semibold text-foreground">
+              {user ? `${user.first_name} ${user.last_name} (${getRoleName(user.role_id)})` : "Loading..."}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {user?.email || ""}
+            </span>
           </div>
         </div>
       </SidebarFooter>

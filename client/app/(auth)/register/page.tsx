@@ -66,11 +66,11 @@ export default function RegisterPage() {
     setIsLoading(true);
     try {
       const payload = {
-        f_name: data.fname,
-        l_name: data.lname,
+        first_name: data.fname,
+        last_name: data.lname,
         email: data.email,
         password: data.password,
-        phone_number: data.phone,
+        phone: data.phone,
       };
       const response = await api.post("/auth/register", payload);
       if (response.data.success) {
