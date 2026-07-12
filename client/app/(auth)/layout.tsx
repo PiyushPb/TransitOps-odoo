@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthCarousel } from "./_components/auth-carousel";
-import { LuZap } from "react-icons/lu";
+import { Bus } from "lucide-react";
 
 export default function AuthLayout({
   children,
@@ -20,8 +20,8 @@ export default function AuthLayout({
         <div className="relative z-10 flex flex-col justify-between h-full p-12">
           {/* Branding */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white flex items-center justify-center shadow-sm">
-              <LuZap className="w-5 h-5 text-black" />
+            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
+              <Bus className="w-5 h-5 text-black" />
             </div>
             <span className="text-xl font-semibold tracking-tight text-white font-serif">
               TransitOps

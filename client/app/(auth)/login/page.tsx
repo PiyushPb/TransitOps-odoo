@@ -5,11 +5,11 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { LuZap } from "react-icons/lu";
+import { Bus } from "lucide-react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const loginSchema = z.object({
@@ -57,12 +57,14 @@ export default function LoginPage() {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 w-full">
-      <div className="mb-10 flex lg:hidden items-center gap-2">
-        <div className="w-8 h-8 bg-black flex items-center justify-center">
-          <LuZap className="w-4 h-4 text-white" />
+        <div className="flex items-center gap-2 mb-8">
+          <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center lg:hidden">
+            <Bus className="w-4 h-4 text-white" />
+          </div>
+          <span className="text-xl font-bold font-serif tracking-tight lg:hidden">
+            TransitOps
+          </span>
         </div>
-        <h1 className="text-xl font-semibold font-serif tracking-tight text-black">TransitOps</h1>
-      </div>
       
       <div className="space-y-1.5 mb-10">
         <h2 className="text-3xl font-bold tracking-tight text-black font-serif">Welcome back</h2>
