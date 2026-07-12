@@ -8,6 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { RoleGate } from "@/components/role-gate";
 import { ROLES } from "@/lib/roles";
 
+import * as React from "react";
+import api from "@/lib/axios";
+
 const LockedScreen = () => (
   <div className="flex flex-col items-center justify-center h-[80vh] text-center space-y-4 animate-in fade-in zoom-in duration-500">
     <div className="bg-muted p-6 rounded-full">
@@ -23,8 +26,35 @@ const LockedScreen = () => (
 );
 
 export default function DashboardPage() {
+  const [data, setData] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchOverview = async () => {
+      try {
+        const res = await api.get('/analytics/overview');
+        if (res.data.success) {
+          setData(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to load overview:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOverview();
+  }, []);
+
+  if (loading) {
+    return <div className="p-8 text-center text-muted-foreground animate-pulse">Loading dashboard...</div>;
+  }
+
+  if (!data) {
+    return <div className="p-8 text-center text-muted-foreground">Failed to load dashboard data.</div>;
+  }
+
   return (
-    <RoleGate allowedRoles={[ROLES.ADMIN, ROLES.FINANCIAL_ANALYST]} fallback={<LockedScreen />}>
+    <RoleGate allowedRoles={[ROLES.ADMIN, ROLES.FINANCIAL_ANALYST, ROLES.FLEET_MANAGER]} fallback={<LockedScreen />}>
       <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <PageHeader 
         title="Dashboard" 
@@ -39,8 +69,8 @@ export default function DashboardPage() {
             <CarFront className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">124</div>
-            <p className="text-xs text-muted-foreground mt-1"><span className="text-success">+2</span> from last month</p>
+            <div className="text-2xl font-bold text-foreground">{data.metrics.totalVehicles}</div>
+            <p className="text-xs text-muted-foreground mt-1">Registered vehicles</p>
           </CardContent>
         </Card>
         
@@ -50,7 +80,7 @@ export default function DashboardPage() {
             <Navigation className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">42</div>
+            <div className="text-2xl font-bold text-foreground">{data.metrics.activeTrips}</div>
             <p className="text-xs text-muted-foreground mt-1">Currently on route</p>
           </CardContent>
         </Card>
@@ -61,7 +91,7 @@ export default function DashboardPage() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">18</div>
+            <div className="text-2xl font-bold text-foreground">{data.metrics.availableDrivers}</div>
             <p className="text-xs text-muted-foreground mt-1">On standby</p>
           </CardContent>
         </Card>
@@ -72,8 +102,8 @@ export default function DashboardPage() {
             <Route className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">8.4<span className="text-sm font-normal"> km/l</span></div>
-            <p className="text-xs text-muted-foreground mt-1"><span className="text-success">+0.2%</span> avg improvement</p>
+            <div className="text-2xl font-bold text-foreground">{data.metrics.fuelEfficiency}<span className="text-sm font-normal"> km/l</span></div>
+            <p className="text-xs text-muted-foreground mt-1">Fleet average</p>
           </CardContent>
         </Card>
         
@@ -83,7 +113,7 @@ export default function DashboardPage() {
             <AlertTriangle className="h-4 w-4 text-danger" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">3</div>
+            <div className="text-2xl font-bold text-foreground">{data.metrics.openIncidents}</div>
             <p className="text-xs text-muted-foreground mt-1">Requires attention</p>
           </CardContent>
         </Card>
@@ -94,8 +124,8 @@ export default function DashboardPage() {
             <Wrench className="h-4 w-4 text-warning" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">12</div>
-            <p className="text-xs text-muted-foreground mt-1">Scheduled for this week</p>
+            <div className="text-2xl font-bold text-foreground">{data.metrics.maintenanceDue}</div>
+            <p className="text-xs text-muted-foreground mt-1">Pending maintenance</p>
           </CardContent>
         </Card>
       </div>
@@ -122,29 +152,24 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-8">
-              {[
-                { time: "10 min ago", title: "Trip TR-9238 Completed", desc: "Route 4, Driver: John Doe" },
-                { time: "45 min ago", title: "New Incident Reported", desc: "Minor delay on Route 12", badge: "Warning" },
-                { time: "2 hours ago", title: "Maintenance Finished", desc: "Vehicle #102 is back online" },
-                { time: "3 hours ago", title: "Driver Shift Started", desc: "7 drivers checked in for afternoon shift" },
-                { time: "5 hours ago", title: "Fuel Alert", desc: "Vehicle #304 low on fuel", badge: "Alert" },
-              ].map((activity, i) => (
+              {data.activities && data.activities.length > 0 ? data.activities.map((activity: any, i: number) => (
                 <div key={i} className="flex items-center">
                   <div className="ml-4 space-y-1">
                     <p className="text-sm font-medium leading-none flex items-center gap-2">
                       {activity.title}
-                      {activity.badge === "Warning" && <Badge variant="outline" className="text-warning border-warning/30 bg-warning/10">Warning</Badge>}
-                      {activity.badge === "Alert" && <Badge variant="outline" className="text-danger border-danger/30 bg-danger/10">Alert</Badge>}
+                      {activity.badge === "Active" && <Badge variant="outline" className="text-success border-success/30 bg-success/10">Active</Badge>}
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {activity.desc}
                     </p>
                   </div>
                   <div className="ml-auto font-medium text-xs text-muted-foreground">
-                    {activity.time}
+                    {new Date(activity.time).toLocaleDateString()}
                   </div>
                 </div>
-              ))}
+              )) : (
+                <p className="text-sm text-muted-foreground">No recent activity.</p>
+              )}
             </div>
           </CardContent>
         </Card>

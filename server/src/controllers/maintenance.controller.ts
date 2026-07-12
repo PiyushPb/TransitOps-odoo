@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { prisma } from '../config/db';
 import { createMaintenanceSchema, completeMaintenanceSchema } from '../schemas/maintenance.schema';
-import { ZodError } from 'zod';
+import { z } from 'zod';
 
 export const createMaintenanceLog = async (req: Request, res: Response) => {
   try {
@@ -42,7 +42,7 @@ export const createMaintenanceLog = async (req: Request, res: Response) => {
 
     return res.status(201).json({ success: true, maintenance_log: log });
   } catch (error) {
-    if (error instanceof ZodError) {
+    if (error instanceof z.ZodError) {
       return res.status(400).json({ success: false, message: (error as any).errors[0].message });
     }
     console.error('Create maintenance error:', error);
@@ -85,7 +85,7 @@ export const completeMaintenanceLog = async (req: Request, res: Response) => {
 
     return res.status(200).json({ success: true, message: 'Maintenance completed successfully' });
   } catch (error) {
-    if (error instanceof ZodError) {
+    if (error instanceof z.ZodError) {
       return res.status(400).json({ success: false, message: (error as any).errors[0].message });
     }
     console.error('Complete maintenance error:', error);

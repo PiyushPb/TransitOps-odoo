@@ -217,8 +217,8 @@ export default function DriversPage() {
       >
         <RoleGate allowedRoles={[ROLES.ADMIN, ROLES.FLEET_MANAGER]}>
           <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-            <DialogTrigger asChild>
-              <Button>+ Add Driver</Button>
+            <DialogTrigger className={buttonVariants()}>
+              + Add Driver
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto">
               <DialogHeader>

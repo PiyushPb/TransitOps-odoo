@@ -28,6 +28,7 @@ export default function LoginPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -128,6 +129,31 @@ export default function LoginPage() {
           {isLoading ? "Signing In..." : "Sign In"}
         </Button>
       </form>
+
+      <div className="mt-8 pt-8 border-t border-zinc-200">
+        <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-4">Quick Access for Evaluation</p>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { label: 'Admin', email: 'admin@transit.com' },
+            { label: 'Fleet Manager', email: 'manager@transit.com' },
+            { label: 'Driver', email: 'driver@transit.com' },
+            { label: 'Financial Analyst', email: 'analyst@transit.com' }
+          ].map((role) => (
+            <button
+              key={role.label}
+              type="button"
+              onClick={() => {
+                setValue("email", role.email);
+                setValue("password", "password123");
+              }}
+              className="flex flex-col items-start p-3 text-left border border-zinc-200 rounded-lg hover:border-black hover:bg-zinc-50 transition-all focus:outline-none"
+            >
+              <span className="text-sm font-semibold text-black">{role.label}</span>
+              <span className="text-xs text-zinc-500 mt-0.5 truncate w-full">{role.email}</span>
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="mt-8 text-left">
         <p className="text-zinc-500 text-sm">

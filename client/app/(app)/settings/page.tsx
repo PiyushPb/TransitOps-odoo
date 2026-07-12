@@ -15,9 +15,6 @@ export default function SettingsPage() {
       <Tabs defaultValue="general" className="w-full">
         <TabsList className="mb-4">
           <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="team">Team Members</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          <TabsTrigger value="billing">Billing</TabsTrigger>
         </TabsList>
         <TabsContent value="general">
           <Card>
@@ -35,17 +32,6 @@ export default function SettingsPage() {
                 <Input id="supportEmail" defaultValue="support@transitops.com" />
               </div>
               <Button>Save Changes</Button>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="team">
-          <Card>
-            <CardHeader>
-              <CardTitle>Team Management</CardTitle>
-              <CardDescription>Invite and manage team access.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Team management features coming soon.</p>
             </CardContent>
           </Card>
         </TabsContent>

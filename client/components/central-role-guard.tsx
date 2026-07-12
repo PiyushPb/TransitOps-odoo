@@ -41,7 +41,7 @@ export function CentralRoleGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!loading && user) {
-      if (user.is_active === false && pathname !== '/pending') {
+      if ((user as any).is_active === false && pathname !== '/pending') {
         router.replace("/pending");
         return;
       }
@@ -60,7 +60,7 @@ export function CentralRoleGuard({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!user || (user.is_active === false && pathname !== '/pending')) {
+  if (!user || ((user as any).is_active === false && pathname !== '/pending')) {
     return null;
   }
 

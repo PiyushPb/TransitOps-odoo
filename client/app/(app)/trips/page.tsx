@@ -58,7 +58,7 @@ export default function TripsPage() {
   const [formError, setFormError] = React.useState<string | null>(null);
 
   const [formData, setFormData] = React.useState({
-    trip_number: `TR-${Math.floor(1000 + Math.random() * 9000)}`,
+    trip_number: `TR-${Math.floor(1000 + Math.random() * 90000)}`,
     vehicle_id: "",
     driver_id: "",
     route_id: "",
@@ -80,7 +80,7 @@ export default function TripsPage() {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [tripsRes, vehiclesRes, driversRes] = await Promise.all([
+      const [tripsRes, vehiclesRes, driversRes, routesRes] = await Promise.all([
         api.get("/trips"),
         api.get("/vehicles?status=Available"),
         api.get("/drivers?status=Available"),
@@ -283,11 +283,9 @@ export default function TripsPage() {
       >
         <RoleGate allowedRoles={[ROLES.ADMIN, ROLES.FLEET_MANAGER]}>
           <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-            <DialogTrigger asChild>
-              <Button className="gap-2">
-                <Plus className="h-4 w-4" />
-                Create Trip
-              </Button>
+            <DialogTrigger className={buttonVariants({ variant: "default" }) + " gap-2"}>
+              <Plus className="h-4 w-4" />
+              Create Trip
             </DialogTrigger>
             <DialogContent className="sm:max-w-[700px] overflow-y-auto max-h-[90vh]">
               <DialogHeader>
@@ -336,7 +334,7 @@ export default function TripsPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Vehicle</Label>
-                    <Select value={formData.vehicle_id} onValueChange={v => setFormData({...formData, vehicle_id: v})} required>
+                    <Select value={formData.vehicle_id} onValueChange={v => setFormData({...formData, vehicle_id: v as string})} required>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select vehicle">
                           {formData.vehicle_id 
@@ -356,7 +354,7 @@ export default function TripsPage() {
                   </div>
                   <div className="space-y-2">
                     <Label>Driver</Label>
-                    <Select value={formData.driver_id} onValueChange={v => setFormData({...formData, driver_id: v})} required>
+                    <Select value={formData.driver_id} onValueChange={v => setFormData({...formData, driver_id: v as string})} required>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select driver">
                           {formData.driver_id
@@ -386,7 +384,7 @@ export default function TripsPage() {
                         if (r) {
                           setFormData({
                             ...formData, 
-                            route_id: v,
+                            route_id: v as string,
                             source: r.source,
                             destination: r.destination,
                             planned_distance: r.distance.toString()

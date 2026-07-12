@@ -195,8 +195,8 @@ export default function RoutesPage() {
       >
         <RoleGate allowedRoles={[ROLES.ADMIN, ROLES.FLEET_MANAGER]}>
           <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-            <DialogTrigger asChild>
-              <Button>+ Add Route</Button>
+            <DialogTrigger className={buttonVariants()}>
+              + Add Route
             </DialogTrigger>
             <DialogContent className="sm:max-w-[500px]">
               <DialogHeader>

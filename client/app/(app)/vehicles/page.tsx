@@ -209,8 +209,8 @@ export default function VehiclesPage() {
       >
         <RoleGate allowedRoles={[ROLES.ADMIN, ROLES.FLEET_MANAGER]}>
           <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-            <DialogTrigger asChild>
-              <Button>+ Add Vehicle</Button>
+            <DialogTrigger className={buttonVariants()}>
+              + Add Vehicle
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto">
               <DialogHeader>
@@ -292,7 +292,7 @@ export default function VehiclesPage() {
                   </div>
                   <div className="space-y-2">
                     <Label>Fuel Type (Optional)</Label>
-                    <Select value={formData.fuel_type} onValueChange={v => setFormData({...formData, fuel_type: v})}>
+                    <Select value={formData.fuel_type} onValueChange={v => setFormData({...formData, fuel_type: v as string})}>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select fuel" />
                       </SelectTrigger>
