@@ -13,7 +13,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // API Routes
+import authRoutes from './routes/auth.route';
+
 app.use('/api/health', healthRoutes);
+app.use('/api/auth', authRoutes);
 
 // 404 Handler
 app.use((req, res, next) => {

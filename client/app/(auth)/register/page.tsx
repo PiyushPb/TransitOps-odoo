@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Bus } from "lucide-react";
 import { FiCamera, FiX, FiEye, FiEyeOff } from "react-icons/fi";
+import { useAuth } from "@/context/AuthContext";
+import api from "@/lib/axios";
 
 const registerSchema = z.object({
   fname: z.string().min(1, "First name is required"),
@@ -58,14 +60,25 @@ export default function RegisterPage() {
 
   const strengthScore = getPasswordStrength(watchPassword);
   
+  const { login } = useAuth();
+  
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
-    // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      toast.success("Account created successfully!");
+      const payload = {
+        f_name: data.fname,
+        l_name: data.lname,
+        email: data.email,
+        password: data.password,
+        phone_number: data.phone,
+      };
+      const response = await api.post("/auth/register", payload);
+      if (response.data.success) {
+        toast.success("Account created successfully!");
+        login(response.data.token, response.data.user);
+      }
     } catch (error: any) {
-      toast.error("Failed to create account (Code: 500).");
+      toast.error(error.response?.data?.message || "Failed to create account.");
     } finally {
       setIsLoading(false);
     }

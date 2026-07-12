@@ -15,6 +15,8 @@ const serif = Urbanist({
   subsets: ["latin"],
 });
 
+import { AuthProvider } from "@/context/AuthContext";
+
 export const metadata: Metadata = {
   title: "TransitOps Smart",
   description: "Modern enterprise SaaS dashboard for Transport Operations",
@@ -38,10 +40,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>
-            {children}
-            <Toaster />
-          </TooltipProvider>
+          <AuthProvider>
+            <TooltipProvider>
+              {children}
+              <Toaster />
+            </TooltipProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

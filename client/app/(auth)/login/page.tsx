@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Bus } from "lucide-react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useAuth } from "@/context/AuthContext";
+import api from "@/lib/axios";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),
@@ -31,25 +33,18 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
+  const { login } = useAuth();
+
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
-    // Simulate API call
     try {
-      await new Promise((resolve, reject) => setTimeout(() => {
-        // Mock error for demonstration of proper error codes
-        if (data.email === "error@example.com") {
-          reject(new Error("AUTH_INVALID_CREDENTIALS"));
-        } else {
-          resolve(true);
-        }
-      }, 1500));
-      toast.success("Successfully logged in!");
-    } catch (error: any) {
-      if (error.message === "AUTH_INVALID_CREDENTIALS") {
-        toast.error("Invalid email or password.");
-      } else {
-        toast.error("An unexpected error occurred (Code: 500).");
+      const response = await api.post("/auth/login", data);
+      if (response.data.success) {
+        toast.success("Successfully logged in!");
+        login(response.data.token, response.data.user);
       }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Invalid email or password.");
     } finally {
       setIsLoading(false);
     }
