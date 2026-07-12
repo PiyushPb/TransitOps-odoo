@@ -2,8 +2,9 @@ import { z } from 'zod';
 
 export const createTripSchema = z.object({
   trip_number: z.string().min(1, 'Trip number is required'),
-  vehicle_id: z.number().int(),
-  driver_id: z.number().int(),
+  vehicle_id: z.number().int().positive('Vehicle is required'),
+  driver_id: z.number().int().positive('Driver is required'),
+  route_id: z.number().int().positive().optional(),
   source: z.string().min(1, 'Source is required'),
   destination: z.string().min(1, 'Destination is required'),
   cargo_type: z.string().optional(),

@@ -40,6 +40,7 @@ export const createTrip = async (req: Request, res: Response) => {
       data: {
         ...data,
         planned_start: new Date(data.planned_start),
+        route_id: data.route_id || null,
         created_by: userId,
         status: 'Draft',
       },

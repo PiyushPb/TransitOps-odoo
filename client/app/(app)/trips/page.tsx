@@ -46,6 +46,8 @@ export default function TripsPage() {
   const [trips, setTrips] = React.useState<any[]>([]);
   const [vehicles, setVehicles] = React.useState<any[]>([]);
   const [drivers, setDrivers] = React.useState<any[]>([]);
+  const [routes, setRoutes] = React.useState<any[]>([]);
+  const [entryMode, setEntryMode] = React.useState<'manual' | 'predefined'>('manual');
   
   const [loading, setLoading] = React.useState(true);
   
@@ -59,6 +61,7 @@ export default function TripsPage() {
     trip_number: `TR-${Math.floor(1000 + Math.random() * 9000)}`,
     vehicle_id: "",
     driver_id: "",
+    route_id: "",
     source: "",
     destination: "",
     cargo_type: "",
@@ -80,11 +83,13 @@ export default function TripsPage() {
       const [tripsRes, vehiclesRes, driversRes] = await Promise.all([
         api.get("/trips"),
         api.get("/vehicles?status=Available"),
-        api.get("/drivers?status=Available")
+        api.get("/drivers?status=Available"),
+        api.get("/routes?status=Active")
       ]);
       setTrips(tripsRes.data.trips || []);
       setVehicles(vehiclesRes.data.vehicles || []);
       setDrivers(driversRes.data.drivers || []);
+      setRoutes(routesRes.data.routes || []);
     } catch (error) {
       console.error("Failed to fetch data:", error);
     } finally {
@@ -134,6 +139,7 @@ export default function TripsPage() {
         ...formData,
         vehicle_id: parseInt(formData.vehicle_id),
         driver_id: parseInt(formData.driver_id),
+        route_id: formData.route_id ? parseInt(formData.route_id) : undefined,
         cargo_weight: weight,
         planned_distance: distance,
         start_odometer: odometer,
@@ -297,6 +303,25 @@ export default function TripsPage() {
                   </div>
                 )}
                 
+                <div className="flex gap-4 p-1 bg-muted/50 rounded-lg w-fit">
+                  <Button 
+                    type="button" 
+                    variant={entryMode === 'manual' ? 'default' : 'ghost'} 
+                    onClick={() => setEntryMode('manual')}
+                    className="h-8"
+                  >
+                    Manual Entry
+                  </Button>
+                  <Button 
+                    type="button" 
+                    variant={entryMode === 'predefined' ? 'default' : 'ghost'} 
+                    onClick={() => setEntryMode('predefined')}
+                    className="h-8"
+                  >
+                    Pre-defined Route
+                  </Button>
+                </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Trip Number</Label>
@@ -351,14 +376,51 @@ export default function TripsPage() {
                   </div>
                 </div>
 
+                {entryMode === 'predefined' && (
+                  <div className="space-y-2 bg-muted/20 p-4 rounded-lg border border-border/50">
+                    <Label>Select Route</Label>
+                    <Select 
+                      value={formData.route_id} 
+                      onValueChange={v => {
+                        const r = routes.find(x => x.id.toString() === v);
+                        if (r) {
+                          setFormData({
+                            ...formData, 
+                            route_id: v,
+                            source: r.source,
+                            destination: r.destination,
+                            planned_distance: r.distance.toString()
+                          });
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a pre-defined route">
+                          {formData.route_id 
+                            ? (() => {
+                                const r = routes.find(x => x.id.toString() === formData.route_id);
+                                return r ? `${r.route_name} (${r.distance} km)` : "Select a route";
+                              })()
+                            : "Select a route"}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {routes.map(r => (
+                          <SelectItem key={r.id} value={r.id.toString()}>{r.route_name} ({r.distance} km)</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Source Location</Label>
-                    <Input required placeholder="E.g. Warehouse A" value={formData.source} onChange={e => setFormData({...formData, source: e.target.value})} />
+                    <Input required placeholder="E.g. Warehouse A" value={formData.source} onChange={e => setFormData({...formData, source: e.target.value})} disabled={entryMode === 'predefined'} />
                   </div>
                   <div className="space-y-2">
                     <Label>Destination Location</Label>
-                    <Input required placeholder="E.g. Distribution Center" value={formData.destination} onChange={e => setFormData({...formData, destination: e.target.value})} />
+                    <Input required placeholder="E.g. Distribution Center" value={formData.destination} onChange={e => setFormData({...formData, destination: e.target.value})} disabled={entryMode === 'predefined'} />
                   </div>
                 </div>
 
@@ -376,7 +438,7 @@ export default function TripsPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Planned Distance (km)</Label>
-                    <Input type="number" step="0.1" required placeholder="120.5" value={formData.planned_distance} onChange={e => setFormData({...formData, planned_distance: e.target.value})} />
+                    <Input type="number" step="0.1" required placeholder="120.5" value={formData.planned_distance} onChange={e => setFormData({...formData, planned_distance: e.target.value})} disabled={entryMode === 'predefined'} />
                   </div>
                   <div className="space-y-2">
                     <Label>Starting Odometer</Label>

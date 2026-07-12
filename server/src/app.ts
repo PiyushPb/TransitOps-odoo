@@ -21,6 +21,7 @@ import maintenanceRoutes from './routes/maintenance.route';
 import expenseRoutes from './routes/expense.route';
 import dashboardRoutes from './routes/dashboard.route';
 import userRoutes from './routes/user.route';
+import routeRoutes from './routes/route.route';
 
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
@@ -31,6 +32,7 @@ app.use('/api/maintenance', maintenanceRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/routes', routeRoutes);
 
 // 404 Handler
 app.use((req, res, next) => {
