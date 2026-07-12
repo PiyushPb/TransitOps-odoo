@@ -54,8 +54,8 @@ export default function LoginPage() {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 w-full">
         <div className="flex items-center gap-2 mb-8">
-          <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center lg:hidden">
-            <Bus className="w-4 h-4 text-white" />
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center lg:hidden">
+            <Bus className="w-4 h-4 text-primary-foreground" />
           </div>
           <span className="text-xl font-bold font-serif tracking-tight lg:hidden">
             TransitOps
@@ -63,23 +63,23 @@ export default function LoginPage() {
         </div>
       
       <div className="space-y-1.5 mb-10">
-        <h2 className="text-3xl font-bold tracking-tight text-black font-serif">Welcome back</h2>
-        <p className="text-zinc-500 text-sm font-normal">
+        <h2 className="text-3xl font-bold tracking-tight text-foreground font-serif">Welcome back</h2>
+        <p className="text-muted-foreground text-sm font-normal">
           Enter your credentials to access your account.
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-black font-semibold text-sm">
+          <Label htmlFor="email" className="text-foreground font-semibold text-sm">
             Email address <span className="text-red-500 ml-0.5">*</span>
           </Label>
           <Input 
             id="email" 
             type="email" 
             placeholder="name@example.com" 
-            className={`bg-white text-black placeholder:text-zinc-400 h-11 rounded-md focus-visible:ring-0 transition-colors ${
-              errors.email ? "border-red-500 focus-visible:border-red-500" : "border-zinc-300 focus-visible:border-black"
+            className={`bg-background text-foreground placeholder:text-muted-foreground h-11 rounded-md focus-visible:ring-0 transition-colors ${
+              errors.email ? "border-red-500 focus-visible:border-red-500" : "border-input focus-visible:border-primary"
             }`}
             {...register("email")}
           />
@@ -90,10 +90,10 @@ export default function LoginPage() {
         
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label htmlFor="password" className="text-black font-semibold text-sm">
+            <Label htmlFor="password" className="text-foreground font-semibold text-sm">
               Password <span className="text-red-500 ml-0.5">*</span>
             </Label>
-            <Link href="#" className="text-sm font-medium text-zinc-500 hover:text-black transition-colors">
+            <Link href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Forgot password?
             </Link>
           </div>
@@ -102,15 +102,15 @@ export default function LoginPage() {
               id="password" 
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
-              className={`bg-white text-black placeholder:text-zinc-400 h-11 rounded-md focus-visible:ring-0 transition-colors pr-10 ${
-                errors.password ? "border-red-500 focus-visible:border-red-500" : "border-zinc-300 focus-visible:border-black"
+              className={`bg-background text-foreground placeholder:text-muted-foreground h-11 rounded-md focus-visible:ring-0 transition-colors pr-10 ${
+                errors.password ? "border-red-500 focus-visible:border-red-500" : "border-input focus-visible:border-primary"
               }`}
               {...register("password")}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-black transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               title={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
@@ -122,7 +122,7 @@ export default function LoginPage() {
         </div>
         
         <Button 
-          className="w-full h-11 rounded-md text-sm font-medium mt-6 bg-black hover:bg-zinc-800 text-white transition-colors border-0 disabled:opacity-50" 
+          className="w-full h-11 rounded-md text-sm font-medium mt-6 bg-primary hover:bg-primary/90 text-primary-foreground transition-colors border-0 disabled:opacity-50" 
           type="submit"
           disabled={isLoading}
         >
@@ -130,8 +130,8 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <div className="mt-8 pt-8 border-t border-zinc-200">
-        <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-4">Quick Access for Evaluation</p>
+      <div className="mt-8 pt-8 border-t border-border">
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">Quick Access for Evaluation</p>
         <div className="grid grid-cols-2 gap-3">
           {[
             { label: 'Admin', email: 'admin@transit.com' },
@@ -146,19 +146,19 @@ export default function LoginPage() {
                 setValue("email", role.email);
                 setValue("password", "password123");
               }}
-              className="flex flex-col items-start p-3 text-left border border-zinc-200 rounded-lg hover:border-black hover:bg-zinc-50 transition-all focus:outline-none"
+              className="flex flex-col items-start p-3 text-left border border-border rounded-lg hover:border-primary hover:bg-muted transition-all focus:outline-none"
             >
-              <span className="text-sm font-semibold text-black">{role.label}</span>
-              <span className="text-xs text-zinc-500 mt-0.5 truncate w-full">{role.email}</span>
+              <span className="text-sm font-semibold text-foreground">{role.label}</span>
+              <span className="text-xs text-muted-foreground mt-0.5 truncate w-full">{role.email}</span>
             </button>
           ))}
         </div>
       </div>
 
       <div className="mt-8 text-left">
-        <p className="text-zinc-500 text-sm">
+        <p className="text-muted-foreground text-sm">
           Don't have an account?{" "}
-          <Link href="/register" className="font-semibold text-black hover:underline underline-offset-4 transition-all">
+          <Link href="/register" className="font-semibold text-foreground hover:underline underline-offset-4 transition-all">
             Sign up
           </Link>
         </p>
