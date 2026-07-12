@@ -1,0 +1,15 @@
+meta {
+  name: Get Maintenance Logs
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/maintenance
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

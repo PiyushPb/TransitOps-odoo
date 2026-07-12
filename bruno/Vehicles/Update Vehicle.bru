@@ -1,0 +1,21 @@
+meta {
+  name: Update Vehicle
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/vehicles/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "status": "In Shop"
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Get Fuel Logs
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/expenses/fuel
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
