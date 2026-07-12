@@ -1,0 +1,24 @@
+meta {
+  name: Complete Trip
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/trips/1/complete
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "actual_distance": 52.0,
+    "actual_end": "2026-07-15T12:00:00Z",
+    "fuel_consumed": 5.5,
+    "end_odometer": 1052
+  }
+}

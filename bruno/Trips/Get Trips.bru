@@ -1,0 +1,15 @@
+meta {
+  name: Get Trips
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/trips
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

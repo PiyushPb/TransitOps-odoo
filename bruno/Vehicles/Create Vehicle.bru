@@ -1,0 +1,25 @@
+meta {
+  name: Create Vehicle
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/vehicles
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "registration_number": "VAN-01",
+    "vehicle_name": "Transit Van",
+    "vehicle_type": "Van",
+    "max_load_capacity": 500,
+    "status": "Available"
+  }
+}

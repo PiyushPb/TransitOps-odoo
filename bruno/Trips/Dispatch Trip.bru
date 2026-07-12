@@ -1,0 +1,15 @@
+meta {
+  name: Dispatch Trip
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/trips/1/dispatch
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
