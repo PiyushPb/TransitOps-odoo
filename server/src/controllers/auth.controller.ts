@@ -25,12 +25,12 @@ export const registerUser = async (req: Request, res: Response) => {
 
     const newUser = await prisma.users.create({
       data: {
-        f_name: data.f_name,
-        l_name: data.l_name,
+        first_name: data.first_name,
+        last_name: data.last_name,
         email: data.email,
         password_hash,
         role_id: defaultRoleId,
-        phone_number: data.phone_number,
+        phone: data.phone,
       },
     });
 
@@ -42,15 +42,15 @@ export const registerUser = async (req: Request, res: Response) => {
       token,
       user: {
         id: newUser.id,
-        f_name: newUser.f_name,
-        l_name: newUser.l_name,
+        first_name: newUser.first_name,
+        last_name: newUser.last_name,
         email: newUser.email,
         role_id: newUser.role_id,
       },
     });
   } catch (error) {
     if (error instanceof ZodError) {
-      return res.status(400).json({ success: false, message: error.errors[0].message });
+      return res.status(400).json({ success: false, message: (error as any).errors[0].message });
     }
     console.error('Registration error:', error);
     return res.status(500).json({ success: false, message: 'Internal server error' });
@@ -88,15 +88,15 @@ export const loginUser = async (req: Request, res: Response) => {
       token,
       user: {
         id: user.id,
-        f_name: user.f_name,
-        l_name: user.l_name,
+        first_name: user.first_name,
+        last_name: user.last_name,
         email: user.email,
         role_id: user.role_id,
       },
     });
   } catch (error) {
     if (error instanceof ZodError) {
-      return res.status(400).json({ success: false, message: error.errors[0].message });
+      return res.status(400).json({ success: false, message: (error as any).errors[0].message });
     }
     console.error('Login error:', error);
     return res.status(500).json({ success: false, message: 'Internal server error' });
@@ -114,13 +114,13 @@ export const getCurrentUser = async (req: Request, res: Response) => {
       where: { id: userId },
       select: {
         id: true,
-        f_name: true,
-        l_name: true,
+        first_name: true,
+        last_name: true,
         email: true,
         role_id: true,
         is_active: true,
         profile_image: true,
-        phone_number: true,
+        phone: true,
       },
     });
 

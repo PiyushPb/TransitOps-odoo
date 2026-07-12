@@ -14,9 +14,21 @@ app.use(express.urlencoded({ extended: true }));
 
 // API Routes
 import authRoutes from './routes/auth.route';
+import vehicleRoutes from './routes/vehicle.route';
+import driverRoutes from './routes/driver.route';
+import tripRoutes from './routes/trip.route';
+import maintenanceRoutes from './routes/maintenance.route';
+import expenseRoutes from './routes/expense.route';
+import dashboardRoutes from './routes/dashboard.route';
 
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/drivers', driverRoutes);
+app.use('/api/trips', tripRoutes);
+app.use('/api/maintenance', maintenanceRoutes);
+app.use('/api/expenses', expenseRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 // 404 Handler
 app.use((req, res, next) => {
