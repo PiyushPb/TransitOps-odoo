@@ -162,16 +162,16 @@ export function AppSidebar() {
           <DropdownMenuContent side="top" className="w-[240px]">
             <DropdownMenuLabel className="text-xs text-muted-foreground uppercase tracking-wider">Quick Switch Role</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => switchRole('admin@transit.com')} disabled={isSwitching} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => switchRole('admin@transitops.in')} disabled={isSwitching} className="cursor-pointer">
               Admin
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => switchRole('manager@transit.com')} disabled={isSwitching} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => switchRole('manager@transitops.in')} disabled={isSwitching} className="cursor-pointer">
               Fleet Manager
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => switchRole('driver@transit.com')} disabled={isSwitching} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => switchRole('driver@transitops.in')} disabled={isSwitching} className="cursor-pointer">
               Driver
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => switchRole('analyst@transit.com')} disabled={isSwitching} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => switchRole('analyst@transitops.in')} disabled={isSwitching} className="cursor-pointer">
               Financial Analyst
             </DropdownMenuItem>
             <DropdownMenuSeparator />

@@ -2,14 +2,14 @@ import { prisma } from '../config/db';
 import bcrypt from 'bcryptjs';
 
 async function main() {
-  console.log('Seeding database with initial data...');
+  console.log('Seeding database with Indian transit data...');
 
   // 1. Roles
   const roles = [
-    { id: 1, name: 'Admin', description: 'Administrator with full access' },
-    { id: 2, name: 'Fleet Manager', description: 'Manages vehicles and drivers' },
-    { id: 3, name: 'Driver', description: 'Vehicle driver' },
-    { id: 4, name: 'Financial Analyst', description: 'Views financial and analytics data' },
+    { id: 1, name: 'Admin',           description: 'Administrator with full access' },
+    { id: 2, name: 'Fleet Manager',   description: 'Manages vehicles and drivers' },
+    { id: 3, name: 'Driver',          description: 'Vehicle driver' },
+    { id: 4, name: 'Finance Analyst', description: 'Views financial and analytics data' },
   ];
 
   for (const role of roles) {
@@ -23,10 +23,10 @@ async function main() {
   // 2. Users
   const hash = await bcrypt.hash('password123', 10);
   const users = [
-    { role_id: 1, first_name: 'Admin', last_name: 'User', email: 'admin@transit.com', password_hash: hash, is_active: true },
-    { role_id: 2, first_name: 'Fleet', last_name: 'Manager', email: 'manager@transit.com', password_hash: hash, is_active: true },
-    { role_id: 3, first_name: 'Driver', last_name: 'One', email: 'driver@transit.com', password_hash: hash, is_active: true },
-    { role_id: 4, first_name: 'Financial', last_name: 'Analyst', email: 'analyst@transit.com', password_hash: hash, is_active: true },
+    { role_id: 1, first_name: 'Rajesh',  last_name: 'Sharma',  email: 'admin@transitops.in',   password_hash: hash, phone: '9876543210', is_active: true },
+    { role_id: 2, first_name: 'Priya',   last_name: 'Mehta',   email: 'manager@transitops.in', password_hash: hash, phone: '9876543211', is_active: true },
+    { role_id: 3, first_name: 'Arjun',   last_name: 'Nair',    email: 'driver@transitops.in',  password_hash: hash, phone: '9876543212', is_active: true },
+    { role_id: 4, first_name: 'Kavitha', last_name: 'Reddy',   email: 'analyst@transitops.in', password_hash: hash, phone: '9876543213', is_active: true },
   ];
 
   for (const u of users) {
@@ -38,53 +38,83 @@ async function main() {
   }
 
   // 3. Vehicles
-const vehicles = [
-  {
-    registration_number: 'MH 12 AB 1001',
-    vehicle_name: 'Volvo FH16',
-    vehicle_type: 'Truck',
-    max_load_capacity: 18000,
-    status: 'Available',
-    current_odometer: 15000,
-    fuel_type: 'Diesel',
-  },
-  {
-    registration_number: 'MH 14 CD 2056',
-    vehicle_name: 'Scania R500',
-    vehicle_type: 'Truck',
-    max_load_capacity: 20000,
-    status: 'In Progress',
-    current_odometer: 42000,
-    fuel_type: 'Diesel',
-  },
-  {
-    registration_number: 'MH 43 EF 3124',
-    vehicle_name: 'Mercedes Actros',
-    vehicle_type: 'Truck',
-    max_load_capacity: 22000,
-    status: 'In Shop',
-    current_odometer: 120000,
-    fuel_type: 'Diesel',
-  },
-  {
-    registration_number: 'MH 46 GH 4589',
-    vehicle_name: 'Ford Transit',
-    vehicle_type: 'Van',
-    max_load_capacity: 3500,
-    status: 'Available',
-    current_odometer: 8000,
-    fuel_type: 'Petrol',
-  },
-  {
-    registration_number: 'MH 04 JK 5298',
-    vehicle_name: 'Sprinter 2500',
-    vehicle_type: 'Van',
-    max_load_capacity: 4000,
-    status: 'Available',
-    current_odometer: 19000,
-    fuel_type: 'Electric',
-  },
-];
+  const vehicles = [
+    {
+      registration_number: 'MH04GH1234',
+      vehicle_name: 'Tata Prima 4028.S',
+      model: 'Prima 4028.S',
+      manufacturer: 'Tata Motors',
+      manufacture_year: 2021,
+      vehicle_type: 'Heavy Truck',
+      max_load_capacity: 25000,
+      acquisition_cost: 3500000,
+      fuel_type: 'Diesel',
+      current_odometer: 87450,
+      status: 'Available',
+      region: 'Maharashtra',
+      purchase_date: new Date('2021-03-15'),
+    },
+    {
+      registration_number: 'DL01CA5678',
+      vehicle_name: 'Ashok Leyland 3518',
+      model: '3518 IL',
+      manufacturer: 'Ashok Leyland',
+      manufacture_year: 2020,
+      vehicle_type: 'Heavy Truck',
+      max_load_capacity: 18000,
+      acquisition_cost: 2800000,
+      fuel_type: 'Diesel',
+      current_odometer: 112340,
+      status: 'In Progress',
+      region: 'Delhi',
+      purchase_date: new Date('2020-07-20'),
+    },
+    {
+      registration_number: 'KA05MN9012',
+      vehicle_name: 'Eicher Pro 6031',
+      model: 'Pro 6031',
+      manufacturer: 'Eicher',
+      manufacture_year: 2022,
+      vehicle_type: 'Medium Truck',
+      max_load_capacity: 12000,
+      acquisition_cost: 2100000,
+      fuel_type: 'Diesel',
+      current_odometer: 54200,
+      status: 'Available',
+      region: 'Karnataka',
+      purchase_date: new Date('2022-01-10'),
+    },
+    {
+      registration_number: 'GJ01RK3456',
+      vehicle_name: 'BharatBenz 3523R',
+      model: '3523R',
+      manufacturer: 'BharatBenz',
+      manufacture_year: 2019,
+      vehicle_type: 'Heavy Truck',
+      max_load_capacity: 23000,
+      acquisition_cost: 3200000,
+      fuel_type: 'Diesel',
+      current_odometer: 198750,
+      status: 'In Shop',
+      region: 'Gujarat',
+      purchase_date: new Date('2019-11-05'),
+    },
+    {
+      registration_number: 'TN22AB7890',
+      vehicle_name: 'Mahindra Blazo X 35',
+      model: 'Blazo X 35',
+      manufacturer: 'Mahindra',
+      manufacture_year: 2023,
+      vehicle_type: 'Heavy Truck',
+      max_load_capacity: 35000,
+      acquisition_cost: 4200000,
+      fuel_type: 'Diesel',
+      current_odometer: 22100,
+      status: 'Available',
+      region: 'Tamil Nadu',
+      purchase_date: new Date('2023-04-01'),
+    },
+  ];
 
   for (const v of vehicles) {
     await prisma.vehicles.upsert({
@@ -96,10 +126,70 @@ const vehicles = [
 
   // 4. Drivers
   const drivers = [
-    { first_name: 'John', last_name: 'Doe', email: 'john@transit.com', phone: '1234567890', license_number: 'DL-1001', license_category: 'Heavy', license_issue_date: new Date('2020-01-01'), license_expiry_date: new Date('2028-01-01'), status: 'Available' },
-    { first_name: 'Jane', last_name: 'Smith', email: 'jane@transit.com', phone: '0987654321', license_number: 'DL-1002', license_category: 'Heavy', license_issue_date: new Date('2019-05-15'), license_expiry_date: new Date('2029-05-15'), status: 'On Trip' },
-    { first_name: 'Robert', last_name: 'Brown', email: 'robert@transit.com', phone: '1122334455', license_number: 'DL-1003', license_category: 'Light', license_issue_date: new Date('2021-11-20'), license_expiry_date: new Date('2026-11-20'), status: 'On Leave' },
-    { first_name: 'Emily', last_name: 'Davis', email: 'emily@transit.com', phone: '5566778899', license_number: 'DL-1004', license_category: 'Light', license_issue_date: new Date('2022-03-10'), license_expiry_date: new Date('2027-03-10'), status: 'Available' },
+    {
+      first_name: 'Suresh',
+      last_name: 'Yadav',
+      email: 'suresh.yadav@transitops.in',
+      phone: '9911223344',
+      address: '12, Shivaji Nagar, Pune, Maharashtra 411005',
+      date_of_birth: new Date('1985-06-15'),
+      emergency_contact: '9911223300',
+      license_number: 'MH1420080012345',
+      license_category: 'HMV',
+      license_issue_date: new Date('2008-03-10'),
+      license_expiry_date: new Date('2028-03-09'),
+      safety_score: 94.5,
+      status: 'Available',
+      joining_date: new Date('2018-05-01'),
+    },
+    {
+      first_name: 'Ramesh',
+      last_name: 'Gupta',
+      email: 'ramesh.gupta@transitops.in',
+      phone: '9922334455',
+      address: '45, Karol Bagh, New Delhi 110005',
+      date_of_birth: new Date('1980-11-20'),
+      emergency_contact: '9922334400',
+      license_number: 'DL1120050067890',
+      license_category: 'HMV',
+      license_issue_date: new Date('2005-08-22'),
+      license_expiry_date: new Date('2025-08-21'),
+      safety_score: 88.0,
+      status: 'On Trip',
+      joining_date: new Date('2016-02-14'),
+    },
+    {
+      first_name: 'Murugan',
+      last_name: 'Krishnan',
+      email: 'murugan.krishnan@transitops.in',
+      phone: '9933445566',
+      address: '78, Anna Nagar, Chennai, Tamil Nadu 600040',
+      date_of_birth: new Date('1990-03-08'),
+      emergency_contact: '9933445500',
+      license_number: 'TN2220120034567',
+      license_category: 'HMV',
+      license_issue_date: new Date('2012-07-15'),
+      license_expiry_date: new Date('2032-07-14'),
+      safety_score: 97.0,
+      status: 'On Leave',
+      joining_date: new Date('2020-09-01'),
+    },
+    {
+      first_name: 'Vijay',
+      last_name: 'Patil',
+      email: 'vijay.patil@transitops.in',
+      phone: '9944556677',
+      address: '33, MG Road, Bengaluru, Karnataka 560001',
+      date_of_birth: new Date('1978-09-25'),
+      emergency_contact: '9944556600',
+      license_number: 'KA0520020078901',
+      license_category: 'HMV',
+      license_issue_date: new Date('2002-04-30'),
+      license_expiry_date: new Date('2027-04-29'),
+      safety_score: 85.5,
+      status: 'Available',
+      joining_date: new Date('2015-11-20'),
+    },
   ];
 
   for (const d of drivers) {
@@ -112,10 +202,12 @@ const vehicles = [
 
   // 5. Routes
   const routesData = [
-    { route_name: 'North Express', source: 'New York', destination: 'Boston', distance: 350, estimated_hours: 4, status: 'Active' },
-    { route_name: 'South Line', source: 'Houston', destination: 'Dallas', distance: 385, estimated_hours: 4.5, status: 'Active' },
-    { route_name: 'West Coast Rider', source: 'Los Angeles', destination: 'San Francisco', distance: 615, estimated_hours: 6.5, status: 'Active' },
-    { route_name: 'Midwest Haul', source: 'Chicago', destination: 'Detroit', distance: 455, estimated_hours: 5, status: 'Active' },
+    { route_name: 'Mumbai–Pune Express',        source: 'Mumbai',    destination: 'Pune',       distance: 148.5, estimated_hours: 2.5,  status: 'Active' },
+    { route_name: 'Delhi–Jaipur Highway',       source: 'Delhi',     destination: 'Jaipur',     distance: 281.0, estimated_hours: 5.0,  status: 'Active' },
+    { route_name: 'Bengaluru–Chennai Corridor', source: 'Bengaluru', destination: 'Chennai',    distance: 346.0, estimated_hours: 6.0,  status: 'Active' },
+    { route_name: 'Ahmedabad–Surat Industrial', source: 'Ahmedabad', destination: 'Surat',      distance: 265.0, estimated_hours: 4.5,  status: 'Active' },
+    { route_name: 'Hyderabad–Vijayawada',       source: 'Hyderabad', destination: 'Vijayawada', distance: 275.0, estimated_hours: 4.75, status: 'Active' },
+    { route_name: 'Kolkata–Patna NH30',         source: 'Kolkata',   destination: 'Patna',      distance: 590.0, estimated_hours: 10.0, status: 'Active' },
   ];
 
   for (const r of routesData) {
@@ -127,19 +219,20 @@ const vehicles = [
 
   // We need actual DB objects for foreign keys
   const dbVehicles = await prisma.vehicles.findMany();
-  const dbDrivers = await prisma.drivers.findMany();
-  const dbRoutes = await prisma.routes.findMany();
-  const dbUsers = await prisma.users.findMany();
+  const dbDrivers  = await prisma.drivers.findMany();
+  const dbRoutes   = await prisma.routes.findMany();
+  const dbUsers    = await prisma.users.findMany();
 
   const adminUser = dbUsers.find(u => u.role_id === 1);
 
-  // 6. Trips (Random data generation for analytics)
+  // 6. Trips (random data for analytics)
   if (dbVehicles.length > 0 && dbDrivers.length > 0 && dbRoutes.length > 0 && adminUser) {
     const existingTrips = await prisma.trips.count();
-    
+
     if (existingTrips === 0) {
-      console.log('Generating dummy trips for analytics...');
-      const statuses = ['Completed', 'Completed', 'Completed', 'In Progress', 'Dispatched', 'Cancelled'];
+      console.log('Generating trips for analytics...');
+      const statuses  = ['Completed', 'Completed', 'Completed', 'In Progress', 'Dispatched', 'Cancelled'];
+      const cargoTypes = ['Textile Goods', 'Electronic Components', 'Auto Parts', 'Pharmaceutical Goods', 'Cement Bags', 'Steel Coils', 'Agricultural Produce', 'FMCG Products'];
       const pastDates = [1, 2, 5, 10, 15, 20, 25, 30, 45, 60].map(days => {
         const d = new Date();
         d.setDate(d.getDate() - days);
@@ -147,35 +240,35 @@ const vehicles = [
       });
 
       for (let i = 1; i <= 20; i++) {
-        const vehicle = dbVehicles[i % dbVehicles.length];
-        const driver = dbDrivers[i % dbDrivers.length];
-        const route = dbRoutes[i % dbRoutes.length];
-        const status = statuses[i % statuses.length];
+        const vehicle  = dbVehicles[i % dbVehicles.length];
+        const driver   = dbDrivers[i % dbDrivers.length];
+        const route    = dbRoutes[i % dbRoutes.length];
+        const status   = statuses[i % statuses.length];
         const pastDate = pastDates[i % pastDates.length];
 
         await prisma.trips.create({
           data: {
-            trip_number: `TR-${10000 + i}`,
-            vehicle_id: vehicle.id,
-            driver_id: driver.id,
-            route_id: route.id,
-            created_by: adminUser.id,
-            source: route.source,
-            destination: route.destination,
-            cargo_type: ['Electronics', 'Furniture', 'Groceries', 'Machinery'][i % 4],
-            cargo_weight: 1000 + (i * 200),
+            trip_number:      `TRP-2024-${String(i).padStart(3, '0')}`,
+            vehicle_id:       vehicle.id,
+            driver_id:        driver.id,
+            route_id:         route.id,
+            created_by:       adminUser.id,
+            source:           route.source,
+            destination:      route.destination,
+            cargo_type:       cargoTypes[i % cargoTypes.length],
+            cargo_weight:     5000 + (i * 800),
             planned_distance: route.distance,
-            actual_distance: status === 'Completed' ? Number(route.distance) + (i * 5) : null,
-            planned_start: pastDate,
-            actual_start: status !== 'Scheduled' ? pastDate : null,
-            actual_end: status === 'Completed' ? new Date(pastDate.getTime() + (Number(route.estimated_hours) * 3600000)) : null,
-            fuel_consumed: status === 'Completed' ? 50 + (i * 2) : null,
-            start_odometer: vehicle.current_odometer! - 1000 + (i * 50),
-            end_odometer: status === 'Completed' ? vehicle.current_odometer! - 1000 + (i * 50) + Number(route.distance) : null,
-            revenue: status === 'Completed' ? 500 + (i * 150) : null,
-            status: status,
-            created_at: pastDate,
-          }
+            actual_distance:  status === 'Completed' ? Number(route.distance) + (i * 3) : null,
+            planned_start:    pastDate,
+            actual_start:     status !== 'Scheduled' ? pastDate : null,
+            actual_end:       status === 'Completed' ? new Date(pastDate.getTime() + (Number(route.estimated_hours) * 3600000)) : null,
+            fuel_consumed:    status === 'Completed' ? 60 + (i * 3) : null,
+            start_odometer:   vehicle.current_odometer! - 2000 + (i * 100),
+            end_odometer:     status === 'Completed' ? vehicle.current_odometer! - 2000 + (i * 100) + Number(route.distance) : null,
+            revenue:          status === 'Completed' ? 15000 + (i * 2000) : null,
+            status:           status,
+            created_at:       pastDate,
+          },
         });
       }
     }
@@ -184,35 +277,47 @@ const vehicles = [
   // 7. Maintenance Logs
   if (dbVehicles.length > 0 && adminUser) {
     const existingLogs = await prisma.maintenance_logs.count();
-    
+
     if (existingLogs === 0) {
-      console.log('Generating dummy maintenance logs...');
-      const statuses = ['Completed', 'Completed', 'In Progress', 'Scheduled'];
-      
+      console.log('Generating maintenance logs...');
+      const statuses      = ['Completed', 'Completed', 'In Progress', 'Scheduled'];
+      const maintTypes    = ['Oil Change', 'Brake Replacement', 'Tyre Rotation', 'Engine Tune-up'];
+      const serviceCentres = [
+        'Tata Motors ASC – Pune',
+        'Ashok Leyland Service – Delhi',
+        'Apollo Tyres – Mumbai',
+        'BharatBenz ASC – Ahmedabad',
+      ];
+
       for (let i = 1; i <= 8; i++) {
         const vehicle = dbVehicles[i % dbVehicles.length];
-        const status = statuses[i % statuses.length];
-        const date = new Date();
+        const status  = statuses[i % statuses.length];
+        const date    = new Date();
         date.setDate(date.getDate() - (i * 3));
 
         await prisma.maintenance_logs.create({
           data: {
-            vehicle_id: vehicle.id,
-            created_by: adminUser.id,
-            maintenance_type: ['Oil Change', 'Brake Replacement', 'Tire Rotation', 'Engine Tune-up'][i % 4],
-            service_center: 'AutoCare Center ' + (i % 3 + 1),
+            vehicle_id:       vehicle.id,
+            created_by:       adminUser.id,
+            maintenance_type: maintTypes[i % maintTypes.length],
+            service_center:   serviceCentres[i % serviceCentres.length],
             maintenance_date: date,
-            completion_date: status === 'Completed' ? new Date(date.getTime() + 86400000 * 2) : null,
-            cost: 150 + (i * 50),
-            status: status,
-            created_at: date,
-          }
+            completion_date:  status === 'Completed' ? new Date(date.getTime() + 86400000 * 2) : null,
+            cost:             8000 + (i * 3000),
+            status:           status,
+            created_at:       date,
+          },
         });
       }
     }
   }
 
-  console.log('Database seeding completed!');
+  console.log('✅ Database seeding completed!');
+  console.log('\n🔑 Login credentials (password: password123)');
+  console.log('   admin@transitops.in   → Rajesh Sharma  (Admin)');
+  console.log('   manager@transitops.in → Priya Mehta    (Fleet Manager)');
+  console.log('   driver@transitops.in  → Arjun Nair     (Driver)');
+  console.log('   analyst@transitops.in → Kavitha Reddy  (Finance Analyst)');
 }
 
 main()

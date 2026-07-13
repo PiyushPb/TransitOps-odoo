@@ -134,10 +134,10 @@ export default function LoginPage() {
         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">Quick Access for Evaluation</p>
         <div className="grid grid-cols-2 gap-3">
           {[
-            { label: 'Admin', email: 'admin@transit.com' },
-            { label: 'Fleet Manager', email: 'manager@transit.com' },
-            { label: 'Driver', email: 'driver@transit.com' },
-            { label: 'Financial Analyst', email: 'analyst@transit.com' }
+          { label: 'Admin',           email: 'admin@transitops.in' },
+            { label: 'Fleet Manager',   email: 'manager@transitops.in' },
+            { label: 'Driver',          email: 'driver@transitops.in' },
+            { label: 'Finance Analyst', email: 'analyst@transitops.in' }
           ].map((role) => (
             <button
               key={role.label}
